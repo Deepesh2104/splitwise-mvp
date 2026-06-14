@@ -25,12 +25,7 @@ const updateUserSchema = Joi.object({
 
 const userIdParamSchema = Joi.object({
   id: Joi.string()
-    .guid({
-      version: [
-        "uuidv4",
-        "uuidv5",
-      ],
-    })
+    .uuid()
     .required(),
 });
 

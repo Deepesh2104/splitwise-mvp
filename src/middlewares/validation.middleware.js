@@ -1,6 +1,6 @@
-const validate = (schema, property = "body") => {
+const validate = (schema, source = "body") => {
   return (req, res, next) => {
-    const { error, value } = schema.validate(req[property], {
+    const { error, value } = schema.validate(req[source], {
       abortEarly: false,
       stripUnknown: true,
     });
@@ -8,15 +8,15 @@ const validate = (schema, property = "body") => {
     if (error) {
       return res.status(400).json({
         success: false,
-        message: "Validation Failed",
-        errors: error.details.map((detail) => ({
-          field: detail.path.join("."),
-          message: detail.message,
+        message: "Validation failed",
+        errors: error.details.map((err) => ({
+          field: err.path.join("."),
+          message: err.message,
         })),
       });
     }
 
-    req[property] = value;
+    req[source] = value;
 
     next();
   };
