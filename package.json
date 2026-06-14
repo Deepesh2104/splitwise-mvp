@@ -1,0 +1,36 @@
+{
+  "name": "splitwise-mvp",
+  "version": "1.0.0",
+  "description": "A Splitwise-inspired expense sharing backend built with Node.js, Express, Sequelize, and MySQL. Supports user management, expense tracking, balance calculation, activity logs, and multiple expense split strategies.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Deepesh2104/splitwise-mvp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Deepesh2104/splitwise-mvp/issues"
+  },
+  "homepage": "https://github.com/Deepesh2104/splitwise-mvp#readme",
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "joi": "^18.2.1",
+    "morgan": "^1.11.0",
+    "mysql2": "^3.22.5",
+    "node-cron": "^4.2.1",
+    "nodemon": "^3.1.14",
+    "sequelize": "^6.37.8",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
