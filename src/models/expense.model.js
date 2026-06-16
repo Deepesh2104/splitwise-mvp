@@ -6,6 +6,7 @@ const Expense = sequelize.define(
   {
     id: {
       type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
 
@@ -22,6 +23,12 @@ const Expense = sequelize.define(
     currency: {
       type: DataTypes.STRING(10),
       allowNull: false,
+    },
+
+    createdByUserId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      field: "created_by_user_id",
     },
 
     paidByUserId: {

@@ -1,149 +1,153 @@
-const User = require("./user.model");
-const Expense = require("./expense.model");
-const ExpenseParticipant = require("./expense-participant.model");
-const BalanceLedger = require("./balance-ledger.model");
-const ActivityLog = require("./activity-log.model");
+module.exports = (models) => {
+  const {
+    User,
+    Expense,
+    ExpenseParticipant,
+    BalanceLedger,
+    ActivityLog,
+  } = models;
 
-/**
- * =========================================
- * USER ↔ EXPENSE
- * =========================================
- */
+  /**
+   * USER ↔ EXPENSE (PAID BY)
+   */
 
-User.hasMany(Expense, {
-  foreignKey: "paidByUserId",
-  sourceKey: "id",
-  as: "expensesCreated",
-});
+  User.hasMany(Expense, {
+    foreignKey: "paidByUserId",
+    sourceKey: "id",
+    as: "expensesPaid",
+  });
 
-Expense.belongsTo(User, {
-  foreignKey: "paidByUserId",
-  targetKey: "id",
-  as: "paidBy",
-});
+  Expense.belongsTo(User, {
+    foreignKey: "paidByUserId",
+    targetKey: "id",
+    as: "paidBy",
+  });
 
-/**
- * =========================================
- * EXPENSE ↔ EXPENSE PARTICIPANTS
- * =========================================
- */
+  /**
+   * USER ↔ EXPENSE (CREATED BY)
+   */
 
-Expense.hasMany(ExpenseParticipant, {
-  foreignKey: "expenseId",
-  sourceKey: "id",
-  as: "participants",
-});
+  User.hasMany(Expense, {
+    foreignKey: "createdByUserId",
+    sourceKey: "id",
+    as: "expensesCreated",
+  });
 
-ExpenseParticipant.belongsTo(Expense, {
-  foreignKey: "expenseId",
-  targetKey: "id",
-  as: "expense",
-});
+  Expense.belongsTo(User, {
+    foreignKey: "createdByUserId",
+    targetKey: "id",
+    as: "createdBy",
+  });
 
-/**
- * =========================================
- * USER ↔ EXPENSE PARTICIPANTS
- * =========================================
- */
+  /**
+   * EXPENSE ↔ EXPENSE PARTICIPANT
+   */
 
-User.hasMany(ExpenseParticipant, {
-  foreignKey: "userId",
-  sourceKey: "id",
-  as: "participatedExpenses",
-});
+  Expense.hasMany(ExpenseParticipant, {
+    foreignKey: "expenseId",
+    sourceKey: "id",
+    as: "participants",
+  });
 
-ExpenseParticipant.belongsTo(User, {
-  foreignKey: "userId",
-  targetKey: "id",
-  as: "participant",
-});
+  ExpenseParticipant.belongsTo(Expense, {
+    foreignKey: "expenseId",
+    targetKey: "id",
+    as: "expense",
+  });
 
-/**
- * =========================================
- * EXPENSE ↔ BALANCE LEDGER
- * =========================================
- */
+  /**
+   * USER ↔ EXPENSE PARTICIPANT
+   */
 
-Expense.hasMany(BalanceLedger, {
-  foreignKey: "expenseId",
-  sourceKey: "id",
-  as: "ledgerEntries",
-});
+  User.hasMany(ExpenseParticipant, {
+    foreignKey: "userId",
+    sourceKey: "id",
+    as: "expenseParticipations",
+  });
 
-BalanceLedger.belongsTo(Expense, {
-  foreignKey: "expenseId",
-  targetKey: "id",
-  as: "expense",
-});
+  ExpenseParticipant.belongsTo(User, {
+    foreignKey: "userId",
+    targetKey: "id",
+    as: "participant",
+  });
 
-/**
- * =========================================
- * USER ↔ DEBITS
- * =========================================
- */
+  /**
+   * EXPENSE ↔ BALANCE LEDGER
+   */
 
-User.hasMany(BalanceLedger, {
-  foreignKey: "debtorUserId",
-  sourceKey: "id",
-  as: "debits",
-});
+  Expense.hasMany(BalanceLedger, {
+    foreignKey: "expenseId",
+    sourceKey: "id",
+    as: "ledgerEntries",
+  });
 
-BalanceLedger.belongsTo(User, {
-  foreignKey: "debtorUserId",
-  targetKey: "id",
-  as: "debtor",
-});
+  BalanceLedger.belongsTo(Expense, {
+    foreignKey: "expenseId",
+    targetKey: "id",
+    as: "expense",
+  });
 
-/**
- * =========================================
- * USER ↔ CREDITS
- * =========================================
- */
+  /**
+   * USER ↔ DEBITS
+   */
 
-User.hasMany(BalanceLedger, {
-  foreignKey: "creditorUserId",
-  sourceKey: "id",
-  as: "credits",
-});
+  User.hasMany(BalanceLedger, {
+    foreignKey: "debtorUserId",
+    sourceKey: "id",
+    as: "debits",
+  });
 
-BalanceLedger.belongsTo(User, {
-  foreignKey: "creditorUserId",
-  targetKey: "id",
-  as: "creditor",
-});
+  BalanceLedger.belongsTo(User, {
+    foreignKey: "debtorUserId",
+    targetKey: "id",
+    as: "debtor",
+  });
 
-/**
- * =========================================
- * EXPENSE ↔ ACTIVITY LOG
- * =========================================
- */
+  /**
+   * USER ↔ CREDITS
+   */
 
-Expense.hasMany(ActivityLog, {
-  foreignKey: "expenseId",
-  sourceKey: "id",
-  as: "activities",
-});
+  User.hasMany(BalanceLedger, {
+    foreignKey: "creditorUserId",
+    sourceKey: "id",
+    as: "credits",
+  });
 
-ActivityLog.belongsTo(Expense, {
-  foreignKey: "expenseId",
-  targetKey: "id",
-  as: "expense",
-});
+  BalanceLedger.belongsTo(User, {
+    foreignKey: "creditorUserId",
+    targetKey: "id",
+    as: "creditor",
+  });
 
-/**
- * =========================================
- * USER ↔ ACTIVITY LOG
- * =========================================
- */
+  /**
+   * EXPENSE ↔ ACTIVITY LOG
+   */
 
-User.hasMany(ActivityLog, {
-  foreignKey: "userId",
-  sourceKey: "id",
-  as: "activityLogs",
-});
+  Expense.hasMany(ActivityLog, {
+    foreignKey: "expenseId",
+    sourceKey: "id",
+    as: "activities",
+  });
 
-ActivityLog.belongsTo(User, {
-  foreignKey: "userId",
-  targetKey: "id",
-  as: "user",
-});
+  ActivityLog.belongsTo(Expense, {
+    foreignKey: "expenseId",
+    targetKey: "id",
+    as: "expense",
+  });
+
+  /**
+   * USER ↔ ACTIVITY LOG
+   */
+
+  User.hasMany(ActivityLog, {
+    foreignKey: "userId",
+    sourceKey: "id",
+    as: "activityLogs",
+  });
+
+  ActivityLog.belongsTo(User, {
+    foreignKey: "userId",
+    targetKey: "id",
+    as: "user",
+  });
+};
